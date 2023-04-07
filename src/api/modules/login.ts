@@ -1,5 +1,5 @@
 import { Login } from "@/api/interface/index";
-import { PORT1 } from "@/api/config/servicePort";
+import { PORT1, PORT } from "@/api/config/servicePort";
 import qs from "qs";
 
 import http from "@/api";
@@ -22,5 +22,5 @@ export const getAuthorButtons = () => {
 
 // * 获取菜单列表
 export const getMenuList = () => {
-	return http.get<Menu.MenuOptions[]>(PORT1 + `/menu/list`);
+	return http.get<Menu.MenuOptions[]>(PORT + `/menulist`);
 };

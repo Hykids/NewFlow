@@ -58,6 +58,7 @@ const LayoutMenu = (props: any) => {
 
 	// 处理后台返回菜单 key 值为 antd 菜单需要的 key 值
 	const deepLoopFloat = (menuList: Menu.MenuOptions[], newArr: MenuItem[] = []) => {
+		console.log("deepLoopFloat", menuList);
 		menuList.forEach((item: Menu.MenuOptions) => {
 			// 下面判断代码解释 *** !item?.children?.length   ==>   (!item.children || item.children.length === 0)
 			if (!item?.children?.length) return newArr.push(getItem(item.title, item.path, addIcon(item.icon!)));
@@ -74,6 +75,7 @@ const LayoutMenu = (props: any) => {
 		try {
 			const { data } = await getMenuList();
 			if (!data) return;
+			console.log("deepLoopFloat");
 			setMenuList(deepLoopFloat(data));
 			// 存储处理过后的所有面包屑导航栏到 redux 中
 			setBreadcrumbList(findAllBreadcrumb(data));

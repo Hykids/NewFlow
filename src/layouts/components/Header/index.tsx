@@ -8,12 +8,13 @@ import Theme from "./components/Theme";
 import Fullscreen from "./components/Fullscreen";
 import "./index.less";
 
-const LayoutHeader = () => {
+const LayoutHeader = (props: any) => {
 	const { Header } = Layout;
+	const { isAdmin } = props;
 
 	return (
 		<Header>
-			<div className="header-lf">
+			<div className="header-lf" style={{ visibility: !isAdmin ? "show" : "hidden" }}>
 				<CollapseIcon />
 				<BreadcrumbNav />
 			</div>
