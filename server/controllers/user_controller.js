@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 const getAllUsers = async (req, res, next)=>{
     try {
         const users = await UserModel.find({}).limit(req.query._end);
-
+        console.log(users)
         res.status(200).json(users);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -13,16 +13,20 @@ const getAllUsers = async (req, res, next)=>{
 
 const createUsers = async (req, res, next)=>{
     try {
-        const { name,email,password,role } = req.body;
+        const { username,password,role } = req.body;
+
+        if(!role)
+        {
+            role='user'
+        }
 
         const hashedPassword = await bcrypt.hash(password, 10);
-        const userExists = await UserModel.findOne({email});
+        const userExists = await UserModel.findOne({username});
 
         if(userExists) return res.status(200).json(userExists);
 
     const newUser = await UserModel.create({
-        name,
-        email,
+        username,
         password:hashedPassword,
         role: role || 'user',
     })
@@ -33,7 +37,7 @@ const createUsers = async (req, res, next)=>{
     }
 };
 
-const deleteUsers = async (res,req)=>{
+const deleteUsers = async (req, res, next)=>{
     try {
         const { id } = req.params;
         const deletedUser = await UserModel.findByIdAndDelete(id);
@@ -62,9 +66,30 @@ const getUsersInfoByID = async (res,req)=>{
     }
 };
 
+// 修改用户权限
+const toggleUserRole = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const user = await UserModel.findById(id);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    user.role = user.role === 'admin' ? 'user' : 'admin';
+    await user.save();
+
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 export {
     getAllUsers,
     deleteUsers,
     getUsersInfoByID,
-    createUsers
+    createUsers,
+    toggleUserRole
 }
