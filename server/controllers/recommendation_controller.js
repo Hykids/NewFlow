@@ -66,6 +66,11 @@ const behaviorMatrix = Array(users.length).fill().map(() => Array(articles.lengt
   recommendations.sort((a, b) => b.interest - a.interest);
   
   console.log(recommendations,'recommendations')
+  // recommendations.slice(0, 10).forEach(item=>{
+  //   await RecommendationModel.create({
+  //     title
+  //   })
+  // })
   return recommendations.slice(0, 10);
 
 
