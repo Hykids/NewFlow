@@ -5,6 +5,8 @@ import StackedLine from "./components/stackedLine";
 import WordCloud from "@/views/echarts/wordCloud";
 // import WordCloud from "react-d3-cloud";
 import "./index.less";
+import { getTagWeight } from "@/api/modules/login";
+import { useState, useEffect } from "react";
 import BookSum from "./images/book-sum.png";
 import AddPerson from "./images/add_person.png";
 import AddTeam from "./images/add_team.png";
@@ -12,28 +14,20 @@ import Today from "./images/today.png";
 import BookSum1 from "./images/book_sum.png";
 
 const { TabPane } = Tabs;
-
-// const data = [
-// 	{ text: "新农村", value: 1000 },
-// 	{ text: "多元化就业", value: 200 },
-// 	{ text: "世界读书日", value: 800 },
-// 	{ text: "党的十八大", value: 1000 },
-// 	{ text: "两会", value: 800 },
-// 	{ text: "航天", value: 500 }
-// ];
-
 const DataVisualize = () => {
+	const [tag, setTag] = useState([]);
+	useEffect(() => {
+		async function fetchData() {
+			const data = await getTagWeight();
+			setTag(data);
+		}
+		fetchData();
+	}, []);
 	const onChange = (key: string) => {
 		console.log(key);
 	};
 
-	const tabsList = [
-		{ label: "近七日", name: 1 },
-		{ label: "近一月", name: 2 },
-		{ label: "近三月", name: 3 },
-		{ label: "近半年", name: 4 },
-		{ label: "近一年", name: 5 }
-	];
+	const tabsList = [{ label: "近七日", name: 1 }];
 
 	return (
 		<div className="dataVisualize-box">
@@ -50,35 +44,35 @@ const DataVisualize = () => {
 						<div className="img-box">
 							<img src={BookSum} alt="" />
 						</div>
-						<span className="left-number">848.132w</span>
+						<span className="left-number">84</span>
 					</div>
 					<div className="item-center">
 						<div className="gitee-traffic traffic-box">
 							<div className="traffic-img">
 								<img src={AddPerson} alt="" />
 							</div>
-							<span className="item-value">13%</span>
+							<span className="item-value">2%</span>
 							<span className="traffic-name sle">上涨百分比（周）</span>
 						</div>
 						<div className="gitHub-traffic traffic-box">
 							<div className="traffic-img">
 								<img src={AddTeam} alt="" />
 							</div>
-							<span className="item-value">4567</span>
+							<span className="item-value">14</span>
 							<span className="traffic-name sle">周访问量</span>
 						</div>
 						<div className="today-traffic traffic-box">
 							<div className="traffic-img">
 								<img src={Today} alt="" />
 							</div>
-							<span className="item-value">897</span>
+							<span className="item-value">2</span>
 							<span className="traffic-name sle">今日访问量</span>
 						</div>
 						<div className="yesterday-traffic traffic-box">
 							<div className="traffic-img">
 								<img src={BookSum1} alt="" />
 							</div>
-							<span className="item-value">1234</span>
+							<span className="item-value">4</span>
 							<span className="traffic-name sle">昨日访问量</span>
 						</div>
 					</div>
@@ -86,7 +80,7 @@ const DataVisualize = () => {
 						<div className="echarts-title">word cloud</div>
 						<div className="book-echarts">
 							{/* <Pie /> */}
-							<WordCloud />
+							{tag ? <WordCloud tag={tag} /> : null}
 							{/* <WordCloud width={400} height={300} random={() => Math.random()} fontWeight="bold" data={data} /> */}
 						</div>
 					</div>

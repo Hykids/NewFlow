@@ -2,11 +2,12 @@ import { Card, Space, Pagination, List } from "antd";
 import { useNavigate } from "react-router-dom";
 import "./index.less";
 import CardItem from "./cardItem";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Article } from "@/api/interface";
 import { store } from "@/redux/index";
 import { getAllArticles, getTopArticles } from "@/api/modules/article";
 import type { PaginationProps } from "antd";
+import RecommentCard from "./recommend";
 
 // import { Carousel } from "antd";
 
@@ -61,7 +62,7 @@ const Home = () => {
 							/>
 						)}
 					</Card>
-
+					<RecommentCard userId={userId} />
 					{/* <Card size="small" title="热门标签" extra={<a href="#">More</a>} style={{ width: 300 }}>
 						<p>Card content</p>
 						<p>Card content</p>
@@ -73,4 +74,4 @@ const Home = () => {
 	);
 };
 
-export default Home;
+export default React.memo(Home);

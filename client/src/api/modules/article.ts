@@ -24,8 +24,8 @@ export const deleteArticles = (id: string) => {
 };
 
 export const likeArticles = (params: any) => {
-	const { id, userId } = params;
-	return http.post<Article.ArticleItem>(PORT + `/articles/${id}/likes`, userId);
+	const { id } = params;
+	return http.post<Article.ArticleItem>(PORT + `/articles/${id}/likes`, params);
 };
 
 export const updateArticles = (params: any) => {
@@ -34,5 +34,9 @@ export const updateArticles = (params: any) => {
 };
 
 export const setBahaviorLog = (params: Article.Bahavior) => {
-	return http.post<Article.ArticleItem>(PORT + `/behavior`, params);
+	return http.post<Article.Bahavior>(PORT + `/behavior`, params);
+};
+
+export const getRecommendation = (id: string) => {
+	return http.get<Article.ArticleItem>(PORT + `/recommendation/${id}`);
 };

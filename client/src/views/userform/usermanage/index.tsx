@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Space, Table, Tag, FloatButton } from "antd";
-import { QuestionCircleOutlined } from "@ant-design/icons";
+import { Space, Table, Tag, message } from "antd";
 import { getAllUser, deleteUser } from "@/api/modules/login";
 
 interface UserDataType {
@@ -11,23 +10,29 @@ interface UserDataType {
 	role: string;
 }
 
+const fetchData = async (setUsers: (users: UserDataType[]) => void) => {
+	const res = await getAllUser();
+	res && setUsers(res.map((user, index) => ({ ...user, index: index + 1 })));
+};
+
 const UserForm: React.FC = () => {
 	const [users, setUsers] = useState<UserDataType[]>([]);
 
 	useEffect(() => {
-		async function fetchData() {
-			const res = await getAllUser();
-			res && setUsers(res.map((user, index) => ({ ...user, index: index + 1 })));
-		}
-		fetchData();
+		fetchData(setUsers);
 	}, []);
 
 	const handleDelete = async (id: string) => {
-		await deleteUser(id);
-		setUsers(users.filter(user => user.key !== id));
+		try {
+			await deleteUser(id);
+			await fetchData(setUsers);
+			message.success("删除用户成功");
+		} catch (error) {
+			message.error("删除失败");
+		}
 	};
 
-	const columns: ColumnsType<DataType> = [
+	const columns: ColumnsType<UserDataType> = [
 		{
 			title: "Index",
 			dataIndex: "index",
@@ -54,7 +59,7 @@ const UserForm: React.FC = () => {
 			key: "action",
 			render: (_, user) => (
 				<Space size="middle">
-					<a onClick={() => handleDelete(user.key)}>Delete</a>
+					<a onClick={() => handleDelete(user._id)}>Delete</a>
 				</Space>
 			)
 		}
@@ -63,7 +68,6 @@ const UserForm: React.FC = () => {
 	return (
 		<>
 			<Table columns={columns} dataSource={users} />
-			<FloatButton icon={<QuestionCircleOutlined />} type="primary" style={{ right: 24 }} />
 		</>
 	);
 };

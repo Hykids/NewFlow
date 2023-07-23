@@ -35,6 +35,11 @@ export const getAllUser = () => {
 	return http.get(PORT + "/users");
 };
 
+//获取单个用户
+export const getUserById = (id: string) => {
+	return http.get(`${PORT}/users/${id}`);
+};
+
 // 更新用户信息
 export const updateUserInfo = (id: string) => {
 	return http.patch(`${PORT}/users/${id}/role`);
@@ -43,4 +48,12 @@ export const updateUserInfo = (id: string) => {
 //删除用户
 export const deleteUser = (id: string) => {
 	return http.delete(`${PORT}/users/${id}`);
+};
+
+export const setTagWeight = (params: any) => {
+	return http.post(`${PORT}/tag`, params);
+};
+
+export const getTagWeight = () => {
+	return http.get(`${PORT}/tag`);
 };

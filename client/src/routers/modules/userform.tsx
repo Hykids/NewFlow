@@ -13,7 +13,7 @@ const formRouter: Array<RouteObject> = [
 		children: [
 			{
 				path: "/user/adduserform",
-				element: lazyLoad(React.lazy(() => import("@/views/form/basicForm/index"))),
+				element: lazyLoad(React.lazy(() => import("@/views/userform/useradd/index"))),
 				meta: {
 					requiresAuth: true,
 					title: "添加用户",

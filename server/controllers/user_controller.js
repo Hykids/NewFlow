@@ -13,8 +13,9 @@ const getAllUsers = async (req, res, next)=>{
 
 const createUsers = async (req, res, next)=>{
     try {
-        const { username,password,role } = req.body;
+        let { username,password,role } = req.body;
 
+        console.log(role,'role')
         if(!role)
         {
             role='user'

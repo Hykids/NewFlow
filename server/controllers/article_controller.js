@@ -53,8 +53,8 @@ const getTopArticles = async (req, res, next) => {
 
 const likeArticle = async (req,res,next)=>{
   try {
-    const { id: articleId } = req.params;
-    const { id: userId } = req;
+    const { id: articleId  } = req.params;
+    const { userId: userId } = req.body;
 
     const article = await ArticleModel.findById(articleId);
     if (!article) {
@@ -81,20 +81,10 @@ const likeArticle = async (req,res,next)=>{
 
 const updateArticle = async (req, res, next) => {
   try {
-    const { title, content, tags } = req.body;
-    const {id} = req.params;
-    let { viewsCount } = req.body;
-    if (viewsCount) {
-      viewsCount = parseInt(viewsCount);
-      console.log(viewsCount,'viewsCount')
-      if (isNaN(viewsCount)) {
-        throw new Error('viewsCount is not a valid number');
-      }
-      viewsCount++;
-    }
+    const { id } = req.params;
     const article = await ArticleModel.findByIdAndUpdate(
       id,
-      { title, content, tags, viewsCount },
+      { $inc: { viewsCount: 1 } },
       { new: true }
     );
     if (!article) {

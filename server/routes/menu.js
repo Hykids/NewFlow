@@ -4,7 +4,7 @@ const router = express.Router();
 
 const adminMenuList = [
     {title:'首页',key:'Home',icon:'HomeOutlined',path: '/home/index'},
-    {title:'数据大屏',key:'DataScreen',icon:'AreaChartOutlined',path: '/dataScreen/index'},
+    // {title:'数据大屏',key:'DataScreen',icon:'AreaChartOutlined',path: '/dataScreen/index'},
     {title:'用户管理',key:'UserManage',icon:'TableOutlined',path: '/usertable',children: [
         {
             "icon": "AppstoreOutlined",

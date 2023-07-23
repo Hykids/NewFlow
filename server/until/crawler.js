@@ -1,9 +1,9 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
 import { ArticleModel } from '../models/article.js';
-import {load,extract} from '@node-rs/jieba';
+import { trainModel, classifyText } from './classify.js';
 
-load({userDict: "../extract.txt"})
+await trainModel();
 
 async function fetchUrl(url) {
   const headers = {
@@ -67,38 +67,29 @@ function getTitleList(year, month, day, pageUrl) {
 }
 
 // 解析HTML网页，获取新闻的文章内容
-function getContent(html) {
+async function getContent(html) {
   const $ = cheerio.load(html);
   const title = $('h3').text() + '\n' + $('h1').text() + '\n' + $('h2').text() + '\n';
+  // const title =  $('h1').text() ;
+  // console.log(title,'title')
   const pList = $('#ozoom').find('p');
+  if(pList.text()==='')
+  {
+    return
+  }
   let content = '';
   pList.each((i, el) => {
-    content += $(el).text() + '\n';
+    content +='<p>'+ $(el).text() + '</p>';;
   });
-  const tags = extract(content, 1);
+  const category = await classifyText(title);
   const article = {
     title:title,
     content:content,
-    tags:tags[0]?.keyword
+    tags:category||'综合'
   }
   return article;
 }
-// function getContent(html) {
-//   const $ = cheerio.load(html);
-//   const title = $('h3').text() + '\n' + $('h1').text() + '\n' + $('h2').text() + '\n';
-//   const pList = $('#ozoom').find('p');
-//   let content = '';
-//   pList.each((i, el) => {
-//     content += $(el).text() + '\n';
-//   });
-//   const tags = extract(content, 1);
-//   const article = {
-//     title:title,
-//     content:content,
-//     tags:tags
-//   }
-//   return article;
-// }
+
 
 function getCurrentDate() {
   const date = new Date();
@@ -111,26 +102,33 @@ function getCurrentDate() {
 
 
 export async function crawler_rmrb() {
-    const [year,month,day] = getCurrentDate()
-    console.log('开始抓取')
-    const pageList = await getPageList(year, month, day);//获取当日版面
-    let articleList = []
-    for (const page of pageList) {
-      const titleList = await getTitleList(year, month, day,page);
-      for (const title of titleList) {
-        const article = await fetchUrl(title);
-        let content = getContent(article)
-        articleList.push(content)
-      }
+  const [year, month, day] = getCurrentDate();
+  console.log('开始抓取');
+  const pageList = await getPageList(year, month, day); // 获取当日版面
+  const articleList = [];
+
+  for (const page of pageList) {
+    const titleList = await getTitleList(year, month, day, page);
+    for (const title of titleList) {
+      const article = await fetchUrl(title);
+      let content = await getContent(article);
+      // console.log(content.title)
+      content && articleList.push(content);
     }
-    console.log("抓取完成，开始存储")
-    
-    articleList.map(async(article)=>{
-      const item=new ArticleModel({
-        title:article.title,
-        content:article.content,
-        tags:article.tags
-    })
-    await item.save()
   }
-    )}
+
+  console.log("抓取完成，开始存储");
+
+  const savePromises = articleList.map(async (article) => {
+    const item = new ArticleModel({
+      title: article.title,
+      content: article.content,
+      tags: article.tags
+    });
+    await item.save();
+  });
+
+  await Promise.all(savePromises);
+  console.log("存储完成");
+
+}

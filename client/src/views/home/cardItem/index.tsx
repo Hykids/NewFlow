@@ -3,6 +3,7 @@ import { Card, Typography } from "antd";
 import { useNavigate } from "react-router-dom";
 import { EyeOutlined, LikeOutlined, CalendarOutlined } from "@ant-design/icons";
 import { setBahaviorLog, updateArticles } from "@/api/modules/article";
+import { setTagWeight } from "@/api/modules/login";
 import "./index.less";
 
 // const { Paragraph } = Typography;
@@ -16,6 +17,7 @@ const CardItem = (props: any) => {
 		navigate(`/article/${article._id}`);
 		await setBahaviorLog({ userId: userId, articleId: article._id, behaviorType: "views" });
 		await updateArticles({ id: article._id, viewsCount: 1 });
+		await setTagWeight({ userId: userId, tagName: article.tags });
 	};
 
 	const formattedDate = new Date(article.createdAt)
@@ -32,7 +34,7 @@ const CardItem = (props: any) => {
 					<Typography.Title onClick={() => clickhandle()} level={3} style={{ margin: 0 }} ellipsis={{ rows: 1 }}>
 						{article.title}
 					</Typography.Title>
-					<Typography.Paragraph ellipsis={{ rows: 3 }}>{article.content}</Typography.Paragraph>
+					<Typography.Paragraph ellipsis={{ rows: 3 }}>{article.content.replace(/<\/?p>/g, "")}</Typography.Paragraph>
 				</Typography>
 				<div className="cardfooter">
 					<Card.Meta style={{ color: "#999" }} avatar={<EyeOutlined />} title={article.viewsCount.toString()} />

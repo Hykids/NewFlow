@@ -10,7 +10,7 @@ const option: EChartsOption = {
 		trigger: "axis"
 	},
 	legend: {
-		data: ["时政", "国际", "生态", "财经", "文化"]
+		data: ["时政", "科技", "生态 ", "财经", "文化"]
 	},
 	grid: {
 		left: "3%",
@@ -36,31 +36,31 @@ const option: EChartsOption = {
 			name: "时政",
 			type: "line",
 			stack: "Total",
-			data: [120, 132, 101, 134, 90, 230, 210]
+			data: [2, 3, 1, 3, 6, 3, 5]
 		},
 		{
 			name: "国际",
 			type: "line",
 			stack: "Total",
-			data: [220, 182, 191, 234, 290, 330, 310]
+			data: [0, 2, 1, 3, 2, 3, 2]
 		},
 		{
 			name: "生态",
 			type: "line",
 			stack: "Total",
-			data: [150, 232, 201, 154, 190, 330, 410]
+			data: [1, 2, 2, 1, 0, 3, 1]
 		},
 		{
 			name: "财经",
 			type: "line",
 			stack: "Total",
-			data: [320, 332, 301, 334, 390, 330, 320]
+			data: [3, 3, 2, 3, 0, 0, 2]
 		},
 		{
 			name: "文化",
 			type: "line",
 			stack: "Total",
-			data: [820, 932, 901, 934, 1290, 1330, 1320]
+			data: [2, 3, 1, 4, 1, 1, 0]
 		}
 	]
 };

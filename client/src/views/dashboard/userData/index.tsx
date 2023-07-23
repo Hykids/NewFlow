@@ -1,5 +1,5 @@
 import WordCloud from "react-d3-cloud";
-import Nightingale from "./components/nightingale";
+// import Nightingale from "./components/nightingale";
 import "./index.less";
 
 // import Today from "./images/today.png";
@@ -31,11 +31,11 @@ const UserDataVisualize = () => {
 			<div className=" card top-box">
 				<div className="top-title">访问历史数据可视化</div>
 				<div className="top-content">
-					<div className="item-left sle">
+					{/* <div className="item-left sle">
 						<span className="left-title">访问总数</span>
 						<Nightingale />
 						<span className="left-number">848.132w</span>
-					</div>
+					</div> */}
 					<div className="item-right">
 						<div className="echarts-title">word cloud</div>
 						<div className="book-echarts">

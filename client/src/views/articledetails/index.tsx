@@ -2,7 +2,7 @@ import "./index.less";
 import { Typography, Space } from "antd";
 import { useState, useEffect } from "react";
 import { getArticleById, likeArticles, setBahaviorLog } from "@/api/modules/article";
-import { LikeOutlined, LikeFilled, EyeOutlined } from "@ant-design/icons";
+import { LikeOutlined, EyeOutlined } from "@ant-design/icons";
 import { store } from "@/redux/index";
 import { connect } from "react-redux";
 import { setUserLog } from "@/redux/modules/cache/action";
@@ -15,6 +15,8 @@ const ArticleDetails = (props: any) => {
 	const { id } = useParams();
 	const { userId } = store.getState().global.userInfo;
 	const userlog = store.getState().cache.userlog;
+
+	console.log(userId, "userId");
 
 	let newLog = {
 		[id]: {
@@ -34,7 +36,7 @@ const ArticleDetails = (props: any) => {
 
 	const startTimer = () => {
 		startTime = Date.now();
-		timer = setInterval(() => {
+		timer = setTimeout(() => {
 			const elapsedTime = Date.now() - startTime;
 			if (elapsedTime >= 10000) {
 				recordUserBehavior(userId, id, "reading");
@@ -105,16 +107,17 @@ const ArticleDetails = (props: any) => {
 				{article && (
 					<Typography>
 						<Title>{article.title}</Title>
-						<Paragraph>{article.content}</Paragraph>
+						<p dangerouslySetInnerHTML={{ __html: article.content }}></p>
 						<div style={{ display: "flex", justifyContent: "center" }}>
 							<Space size={20}>
 								<Paragraph style={{ color: "#999" }}>{formatDate(article.createdAt)}</Paragraph>
 								<Paragraph>
-									{isLiked ? (
+									{/* {isLiked ? (
 										<LikeFilled style={{ color: "red" }} onClick={handleLiked} />
 									) : (
 										<LikeOutlined onClick={handleLiked} />
-									)}
+									)} */}
+									<LikeOutlined onClick={handleLiked} />
 									<span style={{ marginLeft: 8 }}>{article.likesCount}</span>
 								</Paragraph>
 								<Paragraph>

@@ -34,6 +34,7 @@ Object.keys(userArticleMatrix).forEach(userId1 => {
       let dotProduct = 0;
       let normA = 0;
       let normB = 0;
+      // 计算点积与范数
       Object.keys(userArticleMatrix[userId1]).forEach(newsId => {
         if (userArticleMatrix[userId2][newsId]) {
           dotProduct += userArticleMatrix[userId1][newsId] * userArticleMatrix[userId2][newsId];
@@ -43,11 +44,31 @@ Object.keys(userArticleMatrix).forEach(userId1 => {
       Object.keys(userArticleMatrix[userId2]).forEach(newsId => {
         normB += userArticleMatrix[userId2][newsId] ** 2;
       });
+      // 余弦相似度
       const similarity = dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
       userSimilarity[userId1][userId2] = similarity;
     }
   });
 });
+
+function calculatePopularity(articles) {
+  // Step 1: 计算总点击次数
+  let totalClicks = 0;
+  articles.forEach(article => {
+    totalClicks += article.clicks;
+  });
+
+  // Step 2: 计算权重因子并更新文章对象
+  articles.forEach(article => {
+    // 计算点击次数占比
+    const clicksRatio = article.clicks / totalClicks;
+    // 更新文章对象的流行度属性
+    article.popularity = clicksRatio;
+  });
+
+  // 返回更新后的文章对象
+  return articles;
+}
 
 // 推荐文章
 const recommendArticles = {};
